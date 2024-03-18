@@ -4,15 +4,13 @@ asynchronous coroutine
 """
 import asyncio
 import random
-import time
 
 
-async def wait_random(max_delay: float = 10):
+async def wait_random(max_delay: int = 10) -> float:
     """
     asynchronous coroutine that takes an argument and return
     random delay in seconds
     """
-    initia: float = time.perf_counter()
-    await asyncio.sleep(random.randint(0, max_delay))
-    elapsed: float = time.perf_counter() - initia
-    return elapsed
+    rand_num = random.uniform(0, max_delay)
+    await asyncio.sleep(rand_num)
+    return rand_num
