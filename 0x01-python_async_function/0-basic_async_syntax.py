@@ -8,7 +8,11 @@ import time
 
 
 async def wait_random(max_delay: float = 10):
-    initia = time.perf_counter()
+    """
+    asynchronous coroutine that takes an argument and return
+    random delay in seconds
+    """
+    initia: float = time.perf_counter()
     await asyncio.sleep(random.randint(0, max_delay))
-    elapsed = time.perf_counter() - initia
+    elapsed: float = time.perf_counter() - initia
     return elapsed
