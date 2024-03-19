@@ -4,9 +4,10 @@ a module that contains coroutine
 """
 import asyncio
 import random
+from typing import AsyncGenerator
 
 
-async def async_generator():
+async def async_generator() -> AsyncGenerator[float, None]:
     """
     a coroutine that yields a random number
     """
