@@ -7,7 +7,7 @@ import random
 from typing import AsyncGenerator
 
 
-async def async_generator() -> AsyncGenerator[float, None]:
+async def async_generator() -> Generator[float, None, None]:
     """
     a coroutine that yields a random number
     """
