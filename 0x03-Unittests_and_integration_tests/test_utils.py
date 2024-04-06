@@ -38,5 +38,5 @@ class TestAccessNestedMap(unittest.TestCase):
         """
         a test method that checks if KeyError is raised
         """
-        res = access_nested_map(nested_map, path)
-        self.assertRaises(KeyError, res)
+        with self.assertRaises(KeyError):
+            access_nested_map(nested_map, path)
