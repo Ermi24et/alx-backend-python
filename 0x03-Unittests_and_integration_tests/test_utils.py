@@ -10,7 +10,8 @@ from typing import (
     Mapping,
     Sequence,
     Any,
-    Dict
+    Dict,
+    Callable
 )
 from parameterized import parameterized
 
@@ -62,3 +63,25 @@ class TestGetJson(unittest.TestCase):
             mock_get.return_value = test_payload
             res = utils.get_json(test_url)
             self.assertEqual(res, test_payload)
+
+
+class TestMemoize(unittest.TestCase):
+    """
+    a test class which tests the a_method with assert_called_once
+    """
+    def test_memoize(self):
+        """test method to check if a method is correctly memoized"""
+        class TestClass:
+
+            def a_method(self):
+                return 42
+
+            @utils.memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method') as mock_method:
+            obj1 = TestClass()
+            obj1.a_property
+            obj1.a_property
+            mock_method.assert_called_once()
