@@ -22,7 +22,7 @@ class TestGithubOrgClient(unittest.TestCase):
         ("abc")
     ])
     @patch('client.get_json')
-    def test_org(self, path: str, mock) -> Dict:
+    def test_org(self, path, mock):
         """a test method that checks if the GithubOrgClient returns
         the correct value"""
         obj1 = GithubOrgClient(path)
