@@ -3,7 +3,7 @@
 parameterize and patch as decorators
 """
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, PropertyMock
 from client import GithubOrgClient
 from parameterized import parameterized
 
@@ -19,5 +19,15 @@ class TestGithubOrgClient(unittest.TestCase):
         """a test method that checks if the GithubOrgClient returns
         the correct value"""
         obj1 = GithubOrgClient(path)
-        obj1.org
+        obj1.org()
         mock_json.assert_called_once_with(obj1.ORG_URL.format(org=path))
+
+    def test_public_repos_url(self):
+        """ a method to test _public_repos_url"""
+        with patch('client.GithubOrgClient.org',
+                   new_callable=PropertyMock) as mock_prop:
+            payload = {"repos_url": "World"}
+            mock_prop.return_value = payload
+            obj1 = GithubOrgClient("some url")
+            res = obj1._public_repos_url
+            self.assertEqual(res, payload["repos_url"])
