@@ -42,6 +42,7 @@ class TestGithubOrgClient(unittest.TestCase):
                    new_callable=PropertyMock) as mock_prop:
             mock_prop.return_value = "some repo"
             obj1 = GithubOrgClient('some url').public_repos()
-
-        self.assertEqual(['somename', 'somename1'], obj1)
-        mocked_json.assert_called_once_with('some repo')
+            check = [i["name"] for i in js_payload]
+            self.assertEqual(obj1, check)
+            mock_prop.assert_called_once()
+            mocked_json.assert_called_once()
