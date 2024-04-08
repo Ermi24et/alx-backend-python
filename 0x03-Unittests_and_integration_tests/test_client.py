@@ -29,3 +29,4 @@ class TestGithubOrgClient(unittest.TestCase):
             obj1 = GithubOrgClient(test_url+path)
             res = obj1.org()
             self.assertEqual(res, "success")
+            mock_org.assert_called_once()
