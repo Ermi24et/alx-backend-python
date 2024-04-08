@@ -20,5 +20,4 @@ class TestGithubOrgClient(unittest.TestCase):
         the correct value"""
         obj1 = GithubOrgClient(path)
         obj1.org
-        url = obj1.ORG_URL
-        mock_json.assert_called_once_with(url.format(org=path))
+        mock_json.assert_called_once_with(obj1.ORG_URL.format(org=path))
