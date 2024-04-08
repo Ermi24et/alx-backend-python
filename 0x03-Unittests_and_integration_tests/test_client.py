@@ -55,6 +55,7 @@ class TestGithubOrgClient(unittest.TestCase):
         res = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(res, expected)
 
+
 @parameterized_class(
     ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
     TEST_PAYLOAD
@@ -64,7 +65,8 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """mocks the request.get to return example payloads found in the fixtures"""
+        """mocks the request.get to return example payloads found
+        in the fixtures"""
         config = {'return_value.json.side_effect':
                   [
                       cls.org_payload, cls.repos_payload,
@@ -78,3 +80,14 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     def tearDownClass(cls) -> None:
         """a method to stop the patcher"""
         cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """a test method that tests the public_repos without license"""
+        obj1 = GithubOrgClient('google repos')
+        self.assertEqual(obj1.public_repos(), self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """a test method that tests the public_repos with a specific license"""
+        obj1 = GithubOrgClient('google repos')
+        self.assertEqual(obj1.public_repos(license="apache-2.0"),
+                         self.apache2_repos)
