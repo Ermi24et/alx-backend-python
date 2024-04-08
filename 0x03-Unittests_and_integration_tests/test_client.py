@@ -3,13 +3,11 @@
 parameterize and patch as decorators
 """
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from typing import (
     Dict
 )
-from client import (
-    GithubOrgClient
-)
+from client import GithubOrgClient
 from parameterized import parameterized
 
 
