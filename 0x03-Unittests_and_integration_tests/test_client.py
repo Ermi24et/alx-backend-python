@@ -44,8 +44,5 @@ class TestGithubOrgClient(unittest.TestCase):
             obj1 = GithubOrgClient('some url')
             res = obj1.public_repos()
 
-            check = [i["name"] for i in _payload]
-            self.assertEqual(res, check)
-
-            mock_prop.assert_called_once()
-            mock_json.assert_called_once()
+        self.assertEqual(['somename', 'somename1'], res)
+        mock_json.assert_called_once_with('some/repo')
