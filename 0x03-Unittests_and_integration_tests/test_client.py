@@ -13,14 +13,13 @@ class TestGithubOrgClient(unittest.TestCase):
     a test class for the GithubOrgClient class
     """
 
-    @parameterized.expand(["google", "abc"])
+    @parameterized.expand(['google', 'abc'])
     @patch('client.get_json')
-    def test_org(self, path: str, mock_json: MagicMock):
-        """a test method that checks if the GithubOrgClient returns
-        the correct value"""
+    def test_org(self, path, mock_org):
+        """a method test for the GithubOrgClient.org"""
         obj1 = GithubOrgClient(path)
         obj1.org()
-        mock_json.assert_called_once_with(obj1.ORG_URL.format(org=path))
+        mock_org.assert_called_once_with(f'https://api.github.com/orgs/{path}')
 
     def test_public_repos_url(self):
         """ a method to test _public_repos_url"""
