@@ -13,13 +13,14 @@ class TestGithubOrgClient(unittest.TestCase):
     a test class for the GithubOrgClient class
     """
 
-    @parameterized.expand(['google', 'abc'])
+    @parameterized.expand(["google", "abc"])
     @patch('client.get_json')
-    def test_org(self, path, mock_org):
-        """a method test for the GithubOrgClient.org"""
+    def test_org(self, path: str, mock_json: MagicMock):
+        """a test method that checks if the GithubOrgClient returns
+        the correct value"""
         obj1 = GithubOrgClient(path)
         obj1.org()
-        mock_org.assert_called_once_with(f'https://api.github.com/orgs/{path}')
+        mock_json.assert_called_once_with(obj1.ORG_URL.format(org=path))
 
     def test_public_repos_url(self):
         """ a method to test _public_repos_url"""
@@ -30,3 +31,21 @@ class TestGithubOrgClient(unittest.TestCase):
             obj1 = GithubOrgClient("some url")
             res = obj1._public_repos_url
             self.assertEqual(res, payload["repos_url"])
+
+    @patch('client.get_json')
+    def test_public_repos(self, mock_json):
+        """a test method to check if the output is as expected"""
+        _payload = [{"name": "somename"}, {"name": "somename1"}]
+        mock_json.return_value = _payload
+
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_prop:
+            mock_prop.return_value = "lorem ipsum"
+            obj1 = GithubOrgClient('some url')
+            res = obj1.public_repos()
+
+            check = [i["name"] for i in _payload]
+            self.assertEqual(res, check)
+
+            mock_prop.assert_called_once()
+            mock_json.assert_called_once()
