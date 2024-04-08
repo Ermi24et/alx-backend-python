@@ -40,7 +40,7 @@ class TestGithubOrgClient(unittest.TestCase):
 
         with patch('client.GithubOrgClient._public_repos_url',
                    new_callable=PropertyMock) as mock_prop:
-            mock_prop.return_value = "lorem ipsum"
+            mock_prop.return_value = "some/repo"
             obj1 = GithubOrgClient('some url')
             res = obj1.public_repos()
 
