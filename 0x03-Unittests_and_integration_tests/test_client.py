@@ -3,7 +3,7 @@
 parameterize and patch as decorators
 """
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from typing import (
     Dict
 )
@@ -18,15 +18,14 @@ class TestGithubOrgClient(unittest.TestCase):
     a test class for the GithubOrgClient class
     """
     @parameterized.expand([
-        ["https://api.github.com/orgs/", "google"],
-        ["https://api.github.com/orgs/", "abc"]
+        ["google"],
+        ["abc"]
     ])
-    def test_org(self, test_url: str, path: str) -> Dict:
+    def test_org(self, path: str) -> Dict:
         """a test method that checks if the GithubOrgClient returns
         the correct value"""
-        with patch.object(GithubOrgClient, 'org') as mock_org:
-            mock_org.return_value = "success"
-            obj1 = GithubOrgClient(test_url+path)
-            res = obj1.org()
-            self.assertEqual(res, "success")
-            mock_org.assert_called_once()
+        with patch('client.get_json') as mock_org:
+            obj1 = GithubOrgClient(path)
+            obj1.org()
+            url = "https://api.github.com/orgs/{org}"
+            mock_org.assert_called_once_with(url.format(org=path))
