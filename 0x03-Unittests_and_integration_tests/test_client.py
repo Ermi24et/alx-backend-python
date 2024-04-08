@@ -3,9 +3,10 @@
 parameterize and patch as decorators
 """
 import unittest
+from fixtures import TEST_PAYLOAD
 from unittest.mock import patch, MagicMock, PropertyMock
 from client import GithubOrgClient
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -53,3 +54,27 @@ class TestGithubOrgClient(unittest.TestCase):
         """a test method for GithubOrgClient.has_license"""
         res = GithubOrgClient.has_license(repo, license_key)
         self.assertEqual(res, expected)
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """a test integration class"""
+
+    @classmethod
+    def setUpClass(cls):
+        """mocks the request.get to return example payloads found in the fixtures"""
+        config = {'return_value.json.side_effect':
+                  [
+                      cls.org_payload, cls.repos_payload,
+                      cls.org_payload, cls.repos_payload
+                  ]
+                  }
+        cls.get_patcher = patch('requests.get', **config)
+        cls.mock = cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        """a method to stop the patcher"""
+        cls.get_patcher.stop()
